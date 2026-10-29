@@ -1,361 +1,334 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jack & Courtney - Fitness Tracker</title>
+    <title>Jack & Courtney - Health & Fitness Tracker</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            jack: '#3B82F6',   // Blue accent for Jack
-                            courtney: '#EC4899', // Pink accent for Courtney
-                            darkBg: '#0F172A',
-                            darkCard: '#1E293B',
-                            darkBorder: '#334155'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
+            background-color: #0f172a;
+            color: #f8fafc;
         }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        ::-webkit-scrollbar-track {
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
             background: rgba(15, 23, 42, 0.6);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(51, 65, 85, 0.8);
             border-radius: 4px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(71, 85, 105, 1);
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen pb-12">
+<body class="min-h-screen flex flex-col custom-scrollbar">
 
-    <!-- Header Navigation -->
-    <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 px-4 lg:px-8 py-3 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-            <!-- App Logo / Title -->
-            <div class="flex items-center gap-3">
-                <div class="p-2.5 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 text-white shadow-lg shadow-indigo-500/20">
-                    <i class="fa-solid fa-heart-pulse text-xl"></i>
+    <!-- Header Section -->
+    <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-30 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-xl text-slate-950 shadow-lg shadow-emerald-500/20">
+                    <i data-lucide="activity" class="w-6 h-6 stroke-[2.5]"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-                        FitTracker <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 font-medium border border-indigo-500/20">Weekly Progress</span>
+                    <h1 class="font-bold text-lg leading-tight text-white flex items-center gap-2">
+                        Jack & Courtney 
                     </h1>
-                    <p class="text-xs text-slate-400">Jack & Courtney's Health Journey</p>
+                    <p class="text-xs text-slate-400">Weekly Health & Fitness Tracker</p>
                 </div>
             </div>
 
-            <!-- Profile Switcher & Actions -->
-            <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
-                <!-- Profile Selector Tabs -->
-                <div class="bg-slate-800/80 p-1 rounded-xl border border-slate-700/60 flex items-center gap-1">
-                    <button id="btn-jack" onclick="switchUser('Jack')" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2">
-                        <div class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs font-bold border border-blue-500/30">J</div>
-                        <span>Jack</span>
-                    </button>
-                    <button id="btn-courtney" onclick="switchUser('Courtney')" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2">
-                        <div class="w-6 h-6 rounded-full bg-pink-500/20 text-pink-400 flex items-center justify-center text-xs font-bold border border-pink-500/30">C</div>
-                        <span>Courtney</span>
-                    </button>
-                </div>
+            <div class="flex items-center space-x-3">
+                <!-- Sync Mode Indicator / Settings Trigger -->
+                <button onclick="openConfigModal()" id="sync-status-badge" class="px-2.5 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 border bg-amber-500/10 text-amber-400 border-amber-500/20 hover:bg-amber-500/20 transition-all">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                    <span id="sync-status-text">Checking Sync...</span>
+                    <i data-lucide="settings" class="w-3.5 h-3.5 ml-1 text-slate-400"></i>
+                </button>
 
-                <!-- Action Controls -->
-                <div class="flex items-center gap-2">
-                    <button onclick="toggleUnit()" id="unitToggleBtn" class="px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-700 transition" title="Toggle Weight Unit">
-                        <i class="fa-solid fa-scale-balanced mr-1"></i> <span id="unitLabel">lbs</span>
+                <!-- Active User Switcher -->
+                <div class="flex items-center space-x-1 sm:space-x-2 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700/60">
+                    <button id="user-btn-jack" onclick="setActiveUser('Jack')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-blue-400"></span> Jack
                     </button>
-                    <button onclick="openCheckInModal()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold shadow-lg shadow-indigo-600/30 transition flex items-center gap-2">
-                        <i class="fa-solid fa-plus"></i> <span class="hidden sm:inline">Log Week</span>
+                    <button id="user-btn-courtney" onclick="setActiveUser('Courtney')" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-rose-400"></span> Courtney
                     </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Container -->
-    <main class="max-w-7xl mx-auto px-4 lg:px-8 mt-6 space-y-6">
+    <!-- Main Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-        <!-- Active User Status Banner -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl relative overflow-hidden">
-            <div id="userBannerGlow" class="absolute -right-10 -bottom-10 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
-                <div class="flex items-center gap-4">
-                    <div id="userAvatar" class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg">
-                        J
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <h2 id="userNameDisplay" class="text-2xl font-bold text-white">Jack's Overview</h2>
-                            <span id="activeUserBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-semibold border border-blue-500/30">Active Profile</span>
-                        </div>
-                        <p id="userSubtext" class="text-sm text-slate-400 mt-0.5">Tracking health metrics & progress over time</p>
-                    </div>
-                </div>
-
-                <!-- Quick Summary Stat Cards -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div class="bg-slate-800/50 border border-slate-700/50 p-3 rounded-xl min-w-[110px]">
-                        <p class="text-xs text-slate-400 font-medium">Latest Weight</p>
-                        <p id="statLatestWeight" class="text-lg font-bold text-white mt-0.5">--</p>
-                    </div>
-                    <div class="bg-slate-800/50 border border-slate-700/50 p-3 rounded-xl min-w-[110px]">
-                        <p class="text-xs text-slate-400 font-medium">Avg Sleep</p>
-                        <p id="statAvgSleep" class="text-lg font-bold text-emerald-400 mt-0.5">--</p>
-                    </div>
-                    <div class="bg-slate-800/50 border border-slate-700/50 p-3 rounded-xl min-w-[110px]">
-                        <p class="text-xs text-slate-400 font-medium">Avg Steps</p>
-                        <p id="statAvgSteps" class="text-lg font-bold text-amber-400 mt-0.5">--</p>
-                    </div>
-                    <div class="bg-slate-800/50 border border-slate-700/50 p-3 rounded-xl min-w-[110px]">
-                        <p class="text-xs text-slate-400 font-medium">Workouts/Wk</p>
-                        <p id="statAvgWorkouts" class="text-lg font-bold text-purple-400 mt-0.5">--</p>
-                    </div>
-                </div>
+        <!-- Storage Mode Info Banner -->
+        <div id="storage-banner" class="hidden p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2.5 text-slate-300">
+                <i id="storage-banner-icon" data-lucide="database" class="w-4 h-4 text-amber-400 shrink-0"></i>
+                <span id="storage-banner-text">Operating in local mode.</span>
             </div>
+            <button onclick="openConfigModal()" class="text-emerald-400 hover:text-emerald-300 font-medium underline underline-offset-2 shrink-0">
+                Configure Firebase Cloud Sync
+            </button>
         </div>
 
-        <!-- Charts Grid Section -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-            <!-- Weight Trend Chart -->
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-2.5">
-                        <div class="p-2 rounded-lg bg-blue-500/10 text-blue-400">
-                            <i class="fa-solid fa-weight-scale"></i>
-                        </div>
-                        <h3 class="font-semibold text-slate-200">Weight Trend</h3>
-                    </div>
-                    <span id="weightUnitTag" class="text-xs font-semibold px-2 py-1 rounded bg-slate-800 text-slate-400">lbs</span>
-                </div>
-                <div class="h-60 w-full relative">
-                    <canvas id="chartWeight"></canvas>
-                </div>
-            </div>
-
-            <!-- Sleep Chart -->
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-2.5">
-                        <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
-                            <i class="fa-solid fa-bed"></i>
-                        </div>
-                        <h3 class="font-semibold text-slate-200">Avg Sleep / Night</h3>
-                    </div>
-                    <span class="text-xs font-medium text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Target: 7.5-8.5h</span>
-                </div>
-                <div class="h-60 w-full relative">
-                    <canvas id="chartSleep"></canvas>
-                </div>
-            </div>
-
-            <!-- Steps Chart -->
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-2.5">
-                        <div class="p-2 rounded-lg bg-amber-500/10 text-amber-400">
-                            <i class="fa-solid fa-shoe-prints"></i>
-                        </div>
-                        <h3 class="font-semibold text-slate-200">Avg Steps / Day</h3>
-                    </div>
-                    <span class="text-xs font-medium text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">Goal: 10,000</span>
-                </div>
-                <div class="h-60 w-full relative">
-                    <canvas id="chartSteps"></canvas>
-                </div>
-            </div>
-
-            <!-- Calorie Intake Chart -->
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between lg:col-span-2">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-2.5">
-                        <div class="p-2 rounded-lg bg-rose-500/10 text-rose-400">
-                            <i class="fa-solid fa-utensils"></i>
-                        </div>
-                        <h3 class="font-semibold text-slate-200">Avg Calorie Intake</h3>
-                    </div>
-                    <span class="text-xs text-slate-400">Daily Average (kcal)</span>
-                </div>
-                <div class="h-60 w-full relative">
-                    <canvas id="chartCalories"></canvas>
-                </div>
-            </div>
-
-            <!-- Workouts Completed Chart -->
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-2.5">
-                        <div class="p-2 rounded-lg bg-purple-500/10 text-purple-400">
-                            <i class="fa-solid fa-dumbbell"></i>
-                        </div>
-                        <h3 class="font-semibold text-slate-200">Workouts / Week</h3>
-                    </div>
-                    <span class="text-xs text-slate-400">Sessions</span>
-                </div>
-                <div class="h-60 w-full relative">
-                    <canvas id="chartWorkouts"></canvas>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- History & Data Table -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-                <div>
-                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fa-solid fa-clock-rotate-left text-indigo-400"></i> Weekly Log History
-                    </h3>
-                    <p class="text-xs text-slate-400 mt-0.5">Manage, review, or edit past check-in entries</p>
-                </div>
-                <div class="flex items-center gap-3">
-                    <button onclick="resetToDefaultData()" class="text-xs text-slate-400 hover:text-slate-200 underline transition">
-                        Reset Sample Data
-                    </button>
-                    <button onclick="openCheckInModal()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-plus text-indigo-400"></i> Add Entry
-                    </button>
-                </div>
-            </div>
-
-            <!-- Table Container -->
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-slate-300">
-                    <thead class="bg-slate-800/60 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-800">
-                        <tr>
-                            <th class="py-3.5 px-4 rounded-l-xl">Week Starting</th>
-                            <th class="py-3.5 px-4">Weight (<span class="unitText">lbs</span>)</th>
-                            <th class="py-3.5 px-4">Avg Sleep</th>
-                            <th class="py-3.5 px-4">Avg Steps</th>
-                            <th class="py-3.5 px-4">Avg Calories</th>
-                            <th class="py-3.5 px-4">Workouts</th>
-                            <th class="py-3.5 px-4 text-right rounded-r-xl">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historyTableBody" class="divide-y divide-slate-800/60">
-                        <!-- Table rows generated dynamically -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- Modal for Weekly Check-in Form (Create & Edit) -->
-    <div id="checkInModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden transition-opacity duration-300">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden transform transition-all scale-95 opacity-0" id="modalContainer">
-            
-            <!-- Modal Header -->
-            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-800/40">
-                <div class="flex items-center gap-2.5">
-                    <div id="modalHeaderIcon" class="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
-                        <i class="fa-solid fa-calendar-plus"></i>
-                    </div>
-                    <h3 id="modalTitle" class="text-lg font-bold text-white">Log Weekly Check-In</h3>
-                </div>
-                <button onclick="closeCheckInModal()" class="text-slate-400 hover:text-white p-1 rounded-lg transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
+        <!-- Top Action Bar & Filters -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <!-- View Selector Tabs -->
+            <div class="flex bg-slate-800/90 p-1 rounded-xl border border-slate-700/60 w-full sm:w-auto">
+                <button id="view-tab-all" onclick="setViewFilter('all')" class="flex-1 sm:flex-initial px-4 py-2 rounded-lg text-xs font-semibold transition-all text-slate-300 hover:text-white">
+                    Both
+                </button>
+                <button id="view-tab-jack" onclick="setViewFilter('Jack')" class="flex-1 sm:flex-initial px-4 py-2 rounded-lg text-xs font-semibold transition-all text-slate-300 hover:text-white">
+                    Jack Only
+                </button>
+                <button id="view-tab-courtney" onclick="setViewFilter('Courtney')" class="flex-1 sm:flex-initial px-4 py-2 rounded-lg text-xs font-semibold transition-all text-slate-300 hover:text-white">
+                    Courtney Only
                 </button>
             </div>
 
-            <!-- Form -->
-            <form id="checkInForm" onsubmit="handleFormSubmit(event)" class="p-6 space-y-4">
-                <input type="hidden" id="editEntryId" value="">
+            <!-- Log Entry Button -->
+            <button onclick="openEntryModal()" class="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-semibold px-5 py-2.5 rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]">
+                <i data-lucide="plus-circle" class="w-4 h-4 stroke-[2.5]"></i> Add New Weekly Log
+            </button>
+        </div>
 
-                <!-- Target User & Date -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">User Profile</label>
-                        <select id="formUser" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                            <option value="Jack">Jack</option>
-                            <option value="Courtney">Courtney</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Week Starting (Mon)</label>
-                        <input type="date" id="formWeek" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                    </div>
+        <!-- Summary Stats Cards -->
+        <div id="stats-overview" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <!-- Weight Card -->
+            <div class="glass-card p-4 rounded-2xl relative overflow-hidden">
+                <div class="flex items-center justify-between text-slate-400 mb-2">
+                    <span class="text-xs font-medium uppercase tracking-wider">Latest Weight</span>
+                    <i data-lucide="scale" class="w-4 h-4 text-emerald-400"></i>
                 </div>
+                <div id="stat-weight" class="text-lg sm:text-2xl font-bold text-white">--</div>
+                <div id="stat-weight-sub" class="text-[11px] text-slate-400 mt-1 truncate">No entries recorded</div>
+            </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <!-- Weight -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
-                            Weight (<span class="unitText">lbs</span>)
-                        </label>
-                        <div class="relative">
-                            <input type="number" step="0.1" id="formWeight" required placeholder="e.g. 175.5" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                            <span class="absolute right-3 top-2 text-xs text-slate-500 unitText">lbs</span>
-                        </div>
-                    </div>
-
-                    <!-- Sleep -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Avg Sleep / Night</label>
-                        <div class="relative">
-                            <input type="number" step="0.1" id="formSleep" required placeholder="e.g. 7.5" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                            <span class="absolute right-3 top-2 text-xs text-slate-500">hrs</span>
-                        </div>
-                    </div>
+            <!-- Steps Card -->
+            <div class="glass-card p-4 rounded-2xl relative overflow-hidden">
+                <div class="flex items-center justify-between text-slate-400 mb-2">
+                    <span class="text-xs font-medium uppercase tracking-wider">Avg Steps/Day</span>
+                    <i data-lucide="footprints" class="w-4 h-4 text-teal-400"></i>
                 </div>
+                <div id="stat-steps" class="text-lg sm:text-2xl font-bold text-white">--</div>
+                <div id="stat-steps-sub" class="text-[11px] text-slate-400 mt-1 truncate">No entries recorded</div>
+            </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <!-- Steps -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Avg Steps / Day</label>
-                        <input type="number" id="formSteps" required placeholder="e.g. 10250" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                    </div>
-
-                    <!-- Calories -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Avg Calorie Intake</label>
-                        <div class="relative">
-                            <input type="number" id="formCalories" required placeholder="e.g. 2400" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                            <span class="absolute right-3 top-2 text-xs text-slate-500">kcal</span>
-                        </div>
-                    </div>
+            <!-- Calories Card -->
+            <div class="glass-card p-4 rounded-2xl relative overflow-hidden">
+                <div class="flex items-center justify-between text-slate-400 mb-2">
+                    <span class="text-xs font-medium uppercase tracking-wider">Avg Daily Calories</span>
+                    <i data-lucide="flame" class="w-4 h-4 text-amber-400"></i>
                 </div>
+                <div id="stat-calories" class="text-lg sm:text-2xl font-bold text-white">--</div>
+                <div id="stat-calories-sub" class="text-[11px] text-slate-400 mt-1 truncate">No entries recorded</div>
+            </div>
 
-                <!-- Workouts -->
+            <!-- Workouts Card -->
+            <div class="glass-card p-4 rounded-2xl relative overflow-hidden">
+                <div class="flex items-center justify-between text-slate-400 mb-2">
+                    <span class="text-xs font-medium uppercase tracking-wider">Total Workouts</span>
+                    <i data-lucide="dumbbell" class="w-4 h-4 text-purple-400"></i>
+                </div>
+                <div id="stat-workouts" class="text-lg sm:text-2xl font-bold text-white">--</div>
+                <div id="stat-workouts-sub" class="text-[11px] text-slate-400 mt-1 truncate">No entries recorded</div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Weight Trend Chart -->
+            <div class="glass-card p-5 rounded-2xl flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                        <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i> Weight Progress (lbs)
+                    </h3>
+                </div>
+                <div class="relative w-full h-64">
+                    <canvas id="weightChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Activity & Steps Chart -->
+            <div class="glass-card p-5 rounded-2xl flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                        <i data-lucide="footprints" class="w-4 h-4 text-teal-400"></i> Daily Step Count Trends
+                    </h3>
+                </div>
+                <div class="relative w-full h-64">
+                    <canvas id="stepsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Calories Combined Chart -->
+            <div class="glass-card p-5 rounded-2xl flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                        <i data-lucide="flame" class="w-4 h-4 text-amber-400"></i> Daily Calorie Intake
+                    </h3>
+                </div>
+                <div class="relative w-full h-64">
+                    <canvas id="calorieChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Sleep Trend Chart -->
+            <div class="glass-card p-5 rounded-2xl flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                        <i data-lucide="moon" class="w-4 h-4 text-indigo-400"></i> Sleep Hours / Night
+                    </h3>
+                </div>
+                <div class="relative w-full h-64">
+                    <canvas id="sleepChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Log Table Section -->
+        <div class="glass-card rounded-2xl overflow-hidden border border-slate-800">
+            <div class="p-5 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900/40">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Workouts / Week</label>
-                    <input type="number" id="formWorkouts" required min="0" max="14" placeholder="e.g. 5" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <i data-lucide="list" class="w-4 h-4 text-emerald-400"></i> Weekly Activity Log
+                    </h2>
+                    <p class="text-xs text-slate-400">All submitted health data entries for Jack and Courtney</p>
+                </div>
+                <span id="log-count-badge" class="text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-full border border-slate-700">
+                    0 entries
+                </span>
+            </div>
+
+            <div class="overflow-x-auto custom-scrollbar">
+                <table class="w-full text-left text-xs sm:text-sm text-slate-300">
+                    <thead class="bg-slate-900/80 text-slate-400 uppercase text-[10px] sm:text-xs tracking-wider border-b border-slate-800">
+                        <tr>
+                            <th class="py-3.5 px-4 font-semibold">User</th>
+                            <th class="py-3.5 px-4 font-semibold">Week Start Date</th>
+                            <th class="py-3.5 px-4 font-semibold">Weight</th>
+                            <th class="py-3.5 px-4 font-semibold">Sleep (hrs)</th>
+                            <th class="py-3.5 px-4 font-semibold">Daily Steps</th>
+                            <th class="py-3.5 px-4 font-semibold">Cal. Intake</th>
+                            <th class="py-3.5 px-4 font-semibold">Workouts</th>
+                            <th class="py-3.5 px-4 font-semibold text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logs-table-body" class="divide-y divide-slate-800/60">
+                        <!-- Table populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State Placeholder -->
+            <div id="empty-state" class="py-12 px-4 text-center">
+                <div class="w-16 h-16 bg-slate-800/80 rounded-2xl flex items-center justify-center mx-auto mb-3 border border-slate-700 text-slate-500">
+                    <i data-lucide="calendar-x-2" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-slate-200 font-semibold text-sm mb-1">No Log Entries Found</h3>
+                <p class="text-slate-400 text-xs max-w-sm mx-auto mb-4">
+                    Start tracking your weekly progress by clicking the button below.
+                </p>
+                <button onclick="openEntryModal()" class="inline-flex items-center gap-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-medium px-4 py-2 rounded-xl text-xs transition-all">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Add First Entry
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 py-6 text-center text-xs text-slate-500 mt-auto">
+        <p>Jack & Courtney Fitness Hub • Live Auto-Sync Health Tracker</p>
+    </footer>
+
+    <!-- Entry Add/Edit Modal -->
+    <div id="entry-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-card max-w-md w-full rounded-2xl border border-slate-700/80 shadow-2xl overflow-hidden">
+            <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-900/60">
+                <h3 id="modal-title" class="text-base font-bold text-white flex items-center gap-2">
+                    <i data-lucide="edit-3" class="w-4 h-4 text-emerald-400"></i> Add Weekly Log
+                </h3>
+                <button onclick="closeEntryModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-all">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <form id="log-form" onsubmit="handleFormSubmit(event)" class="p-5 space-y-4">
+                <input type="hidden" id="entry-id" value="">
+
+                <!-- User Selection in Modal -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1.5">Logged For</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="flex items-center justify-center gap-2 p-2.5 rounded-xl border border-slate-700 bg-slate-800/60 cursor-pointer hover:border-slate-600 transition-all">
+                            <input type="radio" name="modal-user" value="Jack" id="modal-user-jack" class="accent-emerald-500">
+                            <span class="text-xs font-semibold text-slate-200">Jack</span>
+                        </label>
+                        <label class="flex items-center justify-center gap-2 p-2.5 rounded-xl border border-slate-700 bg-slate-800/60 cursor-pointer hover:border-slate-600 transition-all">
+                            <input type="radio" name="modal-user" value="Courtney" id="modal-user-courtney" class="accent-emerald-500">
+                            <span class="text-xs font-semibold text-slate-200">Courtney</span>
+                        </label>
+                    </div>
                 </div>
 
-                <!-- Modal Actions -->
-                <div class="pt-4 flex items-center justify-end gap-3 border-t border-slate-800">
-                    <button type="button" onclick="closeCheckInModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-medium text-slate-300 transition">
+                <!-- Date Selection -->
+                <div>
+                    <label for="entry-date" class="block text-xs font-medium text-slate-300 mb-1">Week Start Date</label>
+                    <input type="date" id="entry-date" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                </div>
+
+                <!-- Metrics Grid -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label for="entry-weight" class="block text-xs font-medium text-slate-300 mb-1">Weight (lbs)</label>
+                        <input type="number" step="0.1" id="entry-weight" placeholder="e.g. 165.5" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                    </div>
+                    <div>
+                        <label for="entry-sleep" class="block text-xs font-medium text-slate-300 mb-1">Sleep (avg hrs/night)</label>
+                        <input type="number" step="0.1" id="entry-sleep" placeholder="e.g. 7.5" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                    </div>
+                    <div>
+                        <label for="entry-steps" class="block text-xs font-medium text-slate-300 mb-1">Daily Steps (avg)</label>
+                        <input type="number" id="entry-steps" placeholder="e.g. 10000" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                    </div>
+                    <div>
+                        <label for="entry-calories" class="block text-xs font-medium text-slate-300 mb-1">Daily Calories (kcal)</label>
+                        <input type="number" id="entry-calories" placeholder="e.g. 2200" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="entry-workouts" class="block text-xs font-medium text-slate-300 mb-1">Workouts Completed (this week)</label>
+                    <input type="number" id="entry-workouts" min="0" placeholder="e.g. 4" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors">
+                </div>
+
+                <div class="pt-3 flex gap-3">
+                    <button type="button" onclick="closeEntryModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-2.5 rounded-xl text-xs font-semibold transition-all">
                         Cancel
                     </button>
-                    <button type="submit" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold shadow-lg shadow-indigo-600/30 transition">
+                    <button type="submit" id="save-btn" class="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 py-2.5 rounded-xl text-xs font-bold transition-all shadow-lg shadow-emerald-500/20">
                         Save Entry
                     </button>
                 </div>
@@ -363,581 +336,676 @@
         </div>
     </div>
 
-    <!-- Notification Toast -->
-    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-800 border border-indigo-500/50 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
-        <i class="fa-solid fa-circle-check text-indigo-400 text-lg"></i>
-        <span id="toastMessage" class="text-sm font-medium">Data updated successfully!</span>
+    <!-- Firebase Config Modal -->
+    <div id="config-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-card max-w-lg w-full rounded-2xl border border-slate-700/80 shadow-2xl overflow-hidden">
+            <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-900/60">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i data-lucide="cloud-cog" class="w-4 h-4 text-emerald-400"></i> Firebase Sync Settings
+                </h3>
+                <button onclick="closeConfigModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-all">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="p-5 space-y-4 text-xs">
+                <p class="text-slate-300">
+                    Paste your Firebase web project configuration below to sync data live across multiple devices:
+                </p>
+
+                <div>
+                    <label class="block font-medium text-slate-300 mb-1">Firebase Configuration Object (JSON)</label>
+                    <textarea id="firebase-config-json" rows="8" placeholder='{
+  "apiKey": "AIzaSy...",
+  "authDomain": "my-app.firebaseapp.com",
+  "projectId": "my-app",
+  "storageBucket": "my-app.appspot.com",
+  "messagingSenderId": "123456789",
+  "appId": "1:123456789:web:abcdef"
+}' class="w-full font-mono bg-slate-900 border border-slate-700 rounded-xl p-3 text-[11px] text-slate-200 focus:outline-none focus:border-emerald-500 transition-colors custom-scrollbar"></textarea>
+                </div>
+
+                <div class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl space-y-1 text-slate-400 text-[11px]">
+                    <p class="font-semibold text-slate-300 flex items-center gap-1.5">
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i> Local Storage Fallback
+                    </p>
+                    <p>If Firebase isn't configured or is unreachable, the app automatically operates in <strong>Local Storage Mode</strong> so no data is ever lost.</p>
+                </div>
+
+                <div class="pt-2 flex gap-3">
+                    <button type="button" onclick="clearFirebaseConfig()" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 px-4 py-2.5 rounded-xl font-semibold transition-all">
+                        Reset / Use Local
+                    </button>
+                    <button type="button" onclick="saveFirebaseConfig()" class="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20">
+                        Save & Reconnect
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Application Script Logic -->
-    <script>
-        // Sample Initial Data (Pre-populated for Jack & Courtney spanning ~8 recent weeks)
-        const sampleData = {
-            Jack: [
-                { id: 'j1', week: '2026-09-07', weight: 188.5, sleep: 7.1, steps: 8400, calories: 2650, workouts: 3 },
-                { id: 'j2', week: '2026-09-14', weight: 187.2, sleep: 7.3, steps: 9100, calories: 2580, workouts: 4 },
-                { id: 'j3', week: '2026-09-21', weight: 186.0, sleep: 7.5, steps: 9800, calories: 2500, workouts: 4 },
-                { id: 'j4', week: '2026-09-28', weight: 185.1, sleep: 7.8, steps: 10200, calories: 2450, workouts: 5 },
-                { id: 'j5', week: '2026-10-05', weight: 184.3, sleep: 7.6, steps: 10500, calories: 2400, workouts: 5 },
-                { id: 'j6', week: '2026-10-12', weight: 183.5, sleep: 8.0, steps: 11000, calories: 2380, workouts: 5 },
-                { id: 'j7', week: '2026-10-19', weight: 182.8, sleep: 7.9, steps: 10800, calories: 2350, workouts: 4 },
-                { id: 'j8', week: '2026-10-26', weight: 182.0, sleep: 8.1, steps: 11200, calories: 2300, workouts: 5 }
-            ],
-            Courtney: [
-                { id: 'c1', week: '2026-09-07', weight: 138.0, sleep: 7.6, steps: 9200, calories: 1950, workouts: 4 },
-                { id: 'c2', week: '2026-09-14', weight: 137.2, sleep: 7.8, steps: 9600, calories: 1900, workouts: 4 },
-                { id: 'c3', week: '2026-09-21', weight: 136.5, sleep: 8.0, steps: 10100, calories: 1850, workouts: 5 },
-                { id: 'c4', week: '2026-09-28', weight: 135.8, sleep: 8.1, steps: 10400, calories: 1820, workouts: 5 },
-                { id: 'c5', week: '2026-10-05', weight: 135.2, sleep: 7.9, steps: 10800, calories: 1800, workouts: 5 },
-                { id: 'c6', week: '2026-10-12', weight: 134.6, sleep: 8.2, steps: 11200, calories: 1780, workouts: 6 },
-                { id: 'c7', week: '2026-10-19', weight: 134.0, sleep: 8.0, steps: 10900, calories: 1760, workouts: 5 },
-                { id: 'c8', week: '2026-10-26', weight: 133.5, sleep: 8.3, steps: 11500, calories: 1750, workouts: 6 }
-            ]
-        };
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-card max-w-sm w-full rounded-2xl border border-slate-700/80 shadow-2xl p-5 text-center space-y-4">
+            <div class="w-12 h-12 bg-rose-500/10 text-rose-400 rounded-2xl flex items-center justify-center mx-auto border border-rose-500/20">
+                <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h3 class="text-base font-bold text-white">Delete Entry?</h3>
+                <p class="text-xs text-slate-400 mt-1">Are you sure you want to delete this fitness log entry?</p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-2 rounded-xl text-xs font-semibold transition-all">
+                    Cancel
+                </button>
+                <button id="confirm-delete-btn" class="flex-1 bg-rose-500 hover:bg-rose-600 text-white py-2 rounded-xl text-xs font-semibold transition-all shadow-lg shadow-rose-500/20">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
 
-        // State variables
-        let activeUser = 'Jack';
-        let currentUnit = 'lbs'; // 'lbs' or 'kg'
-        let trackerData = {};
-        let chartInstances = {};
+    <!-- Toast Notification Box -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-2.5 bg-slate-800 border border-slate-700 text-slate-200 px-4 py-3 rounded-xl shadow-2xl">
+        <i id="toast-icon" data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i>
+        <span id="toast-message" class="text-xs font-medium">Notification message</span>
+    </div>
 
-        // Initialization
-        window.onload = function() {
-            loadStoredData();
+    <!-- Firebase SDK & Application Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const LOCAL_STORAGE_KEY = 'jack_courtney_fitness_logs_v1';
+        const CUSTOM_CONFIG_KEY = 'jack_courtney_firebase_custom_config';
+
+        // Global State Variables
+        let currentUser = 'Jack'; 
+        let currentFilter = 'all'; 
+        let logsData = []; 
+        let deleteTargetId = null;
+        let isFirebaseConnected = false;
+        let db = null;
+        let auth = null;
+        let unsubscribeLogs = null;
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'jack-courtney-tracker';
+
+        // Chart Instances
+        let weightChartInstance = null;
+        let stepsChartInstance = null;
+        let calorieChartInstance = null;
+        let sleepChartInstance = null;
+
+        // Start Application
+        window.addEventListener('DOMContentLoaded', initApp);
+
+        async function initApp() {
             initCharts();
-            switchUser('Jack');
-        };
+            updateUserUI();
+            updateFilterUI();
 
-        // Load data from LocalStorage or seed defaults
-        function loadStoredData() {
-            const stored = localStorage.getItem('fitTrackerData');
-            if (stored) {
-                try {
-                    trackerData = JSON.parse(stored);
-                } catch (e) {
-                    console.error('Error parsing stored data', e);
-                    trackerData = JSON.parse(JSON.stringify(sampleData));
-                }
-            } else {
-                trackerData = JSON.parse(JSON.stringify(sampleData));
-                saveDataToStorage();
-            }
-        }
+            // Try Firebase Initialization
+            await attemptFirebaseInit();
 
-        // Save state to LocalStorage
-        function saveDataToStorage() {
-            localStorage.setItem('fitTrackerData', JSON.stringify(trackerData));
-        }
-
-        // Reset data to default sample
-        function resetToDefaultData() {
-            if (confirm("Reset all logs for Jack & Courtney to original sample data?")) {
-                trackerData = JSON.parse(JSON.stringify(sampleData));
-                saveDataToStorage();
-                updateDashboard();
-                showToast("Sample data restored successfully!");
-            }
-        }
-
-        // Switch Active User Profile
-        function switchUser(user) {
-            activeUser = user;
-
-            const isJack = user === 'Jack';
-            const primaryColor = isJack ? '#3B82F6' : '#EC4899';
-            const activeBgClass = isJack ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 'bg-pink-600 text-white shadow-lg shadow-pink-500/30';
-            const inactiveClass = 'text-slate-400 hover:text-slate-200';
-
-            // Button styling toggle
-            const btnJack = document.getElementById('btn-jack');
-            const btnCourtney = document.getElementById('btn-courtney');
-
-            if (isJack) {
-                btnJack.className = `px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${activeBgClass}`;
-                btnCourtney.className = `px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${inactiveClass}`;
-            } else {
-                btnCourtney.className = `px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${activeBgClass}`;
-                btnJack.className = `px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${inactiveClass}`;
+            // If Firebase failed, fallback to local storage
+            if (!isFirebaseConnected) {
+                loadLocalStorageLogs();
             }
 
-            // Update Header Banner
-            document.getElementById('userNameDisplay').textContent = `${user}'s Dashboard`;
-            document.getElementById('userAvatar').textContent = user.charAt(0);
-            document.getElementById('userAvatar').className = `w-14 h-14 rounded-2xl flex items-center justify-center text-2xl font-bold shadow-lg transition-colors ${
-                isJack ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white' : 'bg-gradient-to-br from-pink-500 to-rose-600 text-white'
-            }`;
-            document.getElementById('activeUserBadge').className = `text-xs px-2.5 py-0.5 rounded-full font-semibold border ${
-                isJack ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' : 'bg-pink-500/20 text-pink-400 border-pink-500/30'
-            }`;
-
-            // Sync Modal Form select dropdown
-            document.getElementById('formUser').value = user;
-
-            updateDashboard();
+            lucide.createIcons();
         }
 
-        // Toggle Weight Unit (lbs <-> kg)
-        function toggleUnit() {
-            currentUnit = currentUnit === 'lbs' ? 'kg' : 'lbs';
-            document.getElementById('unitLabel').textContent = currentUnit;
-            document.getElementById('weightUnitTag').textContent = currentUnit;
-            
-            // Update table header labels
-            document.querySelectorAll('.unitText').forEach(el => el.textContent = currentUnit);
-
-            updateDashboard();
-            showToast(`Switched weight unit to ${currentUnit}`);
-        }
-
-        // Helper: Convert weight according to active unit
-        function formatWeight(lbsValue) {
-            if (currentUnit === 'kg') {
-                return (lbsValue * 0.45359237).toFixed(1);
+        // Load Custom or Environment Firebase Config
+        function getFirebaseConfig() {
+            const custom = localStorage.getItem(CUSTOM_CONFIG_KEY);
+            if (custom) {
+                try { return JSON.parse(custom); } catch(e){}
             }
-            return Number(lbsValue).toFixed(1);
-        }
-
-        // Helper: Format date strings cleanly
-        function formatDateLabel(dateStr) {
-            if (!dateStr) return '';
-            const d = new Date(dateStr + 'T00:00:00');
-            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        }
-
-        // Update Dashboard Data, Summary Cards, Charts & History Table
-        function updateDashboard() {
-            const userLogs = (trackerData[activeUser] || []).slice().sort((a, b) => new Date(a.week) - new Date(b.week));
-
-            // Summary Metrics calculation
-            if (userLogs.length > 0) {
-                const latest = userLogs[userLogs.length - 1];
-                document.getElementById('statLatestWeight').textContent = `${formatWeight(latest.weight)} ${currentUnit}`;
-                document.getElementById('statAvgSleep').textContent = `${latest.sleep} hrs`;
-                document.getElementById('statAvgSteps').textContent = Number(latest.steps).toLocaleString();
-                document.getElementById('statAvgWorkouts').textContent = `${latest.workouts} days`;
-            } else {
-                document.getElementById('statLatestWeight').textContent = '--';
-                document.getElementById('statAvgSleep').textContent = '--';
-                document.getElementById('statAvgSteps').textContent = '--';
-                document.getElementById('statAvgWorkouts').textContent = '--';
+            if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                try { return JSON.parse(__firebase_config); } catch(e){}
             }
-
-            // Update Charts
-            updateCharts(userLogs);
-
-            // Render History Table (sorted newest first)
-            renderHistoryTable(userLogs.slice().reverse());
+            return null;
         }
 
-        // Chart Config & Initialization
-        function initCharts() {
-            const commonOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#1E293B',
-                        titleColor: '#F8FAFC',
-                        bodyColor: '#CBD5E1',
-                        borderColor: '#334155',
-                        borderWidth: 1,
-                        padding: 10,
-                        cornerRadius: 8
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: { color: 'rgba(51, 65, 85, 0.3)' },
-                        ticks: { color: '#94A3B8', font: { family: 'Inter', size: 11 } }
-                    },
-                    y: {
-                        grid: { color: 'rgba(51, 65, 85, 0.3)' },
-                        ticks: { color: '#94A3B8', font: { family: 'Inter', size: 11 } }
-                    }
-                }
-            };
-
-            // 1. Weight Chart
-            chartInstances.weight = new Chart(document.getElementById('chartWeight'), {
-                type: 'line',
-                data: { labels: [], datasets: [] },
-                options: {
-                    ...commonOptions,
-                    tension: 0.3,
-                    plugins: {
-                        ...commonOptions.plugins,
-                        tooltip: {
-                            ...commonOptions.plugins.tooltip,
-                            callbacks: {
-                                label: (ctx) => ` Weight: ${ctx.parsed.y} ${currentUnit}`
-                            }
-                        }
-                    }
-                }
-            });
-
-            // 2. Sleep Chart
-            chartInstances.sleep = new Chart(document.getElementById('chartSleep'), {
-                type: 'line',
-                data: { labels: [], datasets: [] },
-                options: {
-                    ...commonOptions,
-                    tension: 0.3,
-                    plugins: {
-                        ...commonOptions.plugins,
-                        tooltip: {
-                            ...commonOptions.plugins.tooltip,
-                            callbacks: {
-                                label: (ctx) => ` Sleep: ${ctx.parsed.y} hrs`
-                            }
-                        }
-                    }
-                }
-            });
-
-            // 3. Steps Chart
-            chartInstances.steps = new Chart(document.getElementById('chartSteps'), {
-                type: 'bar',
-                data: { labels: [], datasets: [] },
-                options: {
-                    ...commonOptions,
-                    plugins: {
-                        ...commonOptions.plugins,
-                        tooltip: {
-                            ...commonOptions.plugins.tooltip,
-                            callbacks: {
-                                label: (ctx) => ` Steps: ${ctx.parsed.y.toLocaleString()}`
-                            }
-                        }
-                    }
-                }
-            });
-
-            // 4. Calories Chart
-            chartInstances.calories = new Chart(document.getElementById('chartCalories'), {
-                type: 'line',
-                data: { labels: [], datasets: [] },
-                options: {
-                    ...commonOptions,
-                    tension: 0.3,
-                    plugins: {
-                        ...commonOptions.plugins,
-                        tooltip: {
-                            ...commonOptions.plugins.tooltip,
-                            callbacks: {
-                                label: (ctx) => ` Intake: ${ctx.parsed.y.toLocaleString()} kcal`
-                            }
-                        }
-                    }
-                }
-            });
-
-            // 5. Workouts Chart
-            chartInstances.workouts = new Chart(document.getElementById('chartWorkouts'), {
-                type: 'bar',
-                data: { labels: [], datasets: [] },
-                options: {
-                    ...commonOptions,
-                    scales: {
-                        ...commonOptions.scales,
-                        y: {
-                            ...commonOptions.scales.y,
-                            min: 0,
-                            max: 7,
-                            ticks: { stepSize: 1, color: '#94A3B8' }
-                        }
-                    },
-                    plugins: {
-                        ...commonOptions.plugins,
-                        tooltip: {
-                            ...commonOptions.plugins.tooltip,
-                            callbacks: {
-                                label: (ctx) => ` Workouts: ${ctx.parsed.y} days`
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // Update Charts Data dynamically
-        function updateCharts(logs) {
-            const labels = logs.map(l => formatDateLabel(l.week));
-            const primaryHex = activeUser === 'Jack' ? '#3B82F6' : '#EC4899';
-            const primaryAlpha = activeUser === 'Jack' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(236, 72, 153, 0.15)';
-
-            // 1. Weight Chart Data
-            chartInstances.weight.data.labels = labels;
-            chartInstances.weight.data.datasets = [{
-                data: logs.map(l => parseFloat(formatWeight(l.weight))),
-                borderColor: primaryHex,
-                backgroundColor: primaryAlpha,
-                fill: true,
-                borderWidth: 2,
-                pointBackgroundColor: primaryHex,
-                pointRadius: 4
-            }];
-            chartInstances.weight.update();
-
-            // 2. Sleep Chart Data (With 8h Goal Target Line)
-            chartInstances.sleep.data.labels = labels;
-            chartInstances.sleep.data.datasets = [
-                {
-                    data: logs.map(l => l.sleep),
-                    borderColor: '#10B981',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    fill: true,
-                    borderWidth: 2,
-                    pointBackgroundColor: '#10B981',
-                    pointRadius: 4
-                },
-                {
-                    label: 'Target (8h)',
-                    data: Array(logs.length).fill(8),
-                    borderColor: 'rgba(16, 185, 129, 0.4)',
-                    borderDash: [4, 4],
-                    borderWidth: 1.5,
-                    pointRadius: 0,
-                    fill: false
-                }
-            ];
-            chartInstances.sleep.update();
-
-            // 3. Steps Chart Data (With 10,000 Step Goal Reference Line)
-            chartInstances.steps.data.labels = labels;
-            chartInstances.steps.data.datasets = [
-                {
-                    type: 'bar',
-                    data: logs.map(l => l.steps),
-                    backgroundColor: logs.map(l => l.steps >= 10000 ? 'rgba(245, 158, 11, 0.85)' : 'rgba(245, 158, 11, 0.4)'),
-                    borderRadius: 6
-                },
-                {
-                    type: 'line',
-                    label: 'Goal (10k)',
-                    data: Array(logs.length).fill(10000),
-                    borderColor: 'rgba(245, 158, 11, 0.6)',
-                    borderDash: [4, 4],
-                    borderWidth: 1.5,
-                    pointRadius: 0,
-                    fill: false
-                }
-            ];
-            chartInstances.steps.update();
-
-            // 4. Calorie Intake Chart
-            chartInstances.calories.data.labels = labels;
-            chartInstances.calories.data.datasets = [{
-                data: logs.map(l => l.calories),
-                borderColor: '#F43F5E',
-                backgroundColor: 'rgba(244, 63, 94, 0.1)',
-                fill: true,
-                borderWidth: 2,
-                pointBackgroundColor: '#F43F5E',
-                pointRadius: 4
-            }];
-            chartInstances.calories.update();
-
-            // 5. Workouts Chart
-            chartInstances.workouts.data.labels = labels;
-            chartInstances.workouts.data.datasets = [{
-                data: logs.map(l => l.workouts),
-                backgroundColor: 'rgba(168, 85, 247, 0.75)',
-                hoverBackgroundColor: 'rgba(168, 85, 247, 0.95)',
-                borderRadius: 6
-            }];
-            chartInstances.workouts.update();
-        }
-
-        // Render History Table
-        function renderHistoryTable(logs) {
-            const tbody = document.getElementById('historyTableBody');
-            tbody.innerHTML = '';
-
-            if (logs.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="py-8 text-center text-slate-500 italic">
-                            No logs recorded for ${activeUser} yet. Click "Add Entry" to log a week.
-                        </td>
-                    </tr>
-                `;
+        // Attempt Firebase Connection
+        async function attemptFirebaseInit() {
+            const config = getFirebaseConfig();
+            if (!config || !config.projectId || config.projectId === "demo-app") {
+                setSyncMode(false, "Local Mode (No Cloud Config)");
                 return;
             }
 
-            logs.forEach(entry => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-800/40 transition duration-150';
+            try {
+                const app = initializeApp(config, 'jack-courtney-app-' + Date.now());
+                auth = getAuth(app);
+                db = getFirestore(app);
 
-                tr.innerHTML = `
-                    <td class="py-3.5 px-4 font-semibold text-white">
-                        ${entry.week}
-                    </td>
-                    <td class="py-3.5 px-4">
-                        <span class="font-medium text-slate-200">${formatWeight(entry.weight)}</span>
-                    </td>
-                    <td class="py-3.5 px-4">
-                        <span class="inline-flex items-center gap-1 text-emerald-400 font-medium">
-                            ${entry.sleep} <span class="text-xs text-slate-500">hrs</span>
-                        </span>
-                    </td>
-                    <td class="py-3.5 px-4">
-                        <span class="font-medium text-amber-400">${Number(entry.steps).toLocaleString()}</span>
-                    </td>
-                    <td class="py-3.5 px-4">
-                        <span class="font-medium text-rose-400">${Number(entry.calories).toLocaleString()}</span> <span class="text-xs text-slate-500">kcal</span>
-                    </td>
-                    <td class="py-3.5 px-4">
-                        <span class="px-2.5 py-1 rounded-md bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-semibold">
-                            ${entry.workouts} sessions
-                        </span>
-                    </td>
-                    <td class="py-3.5 px-4 text-right">
-                        <div class="flex items-center justify-end gap-2">
-                            <button onclick="editEntry('${entry.id}')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition" title="Edit Entry">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </button>
-                            <button onclick="deleteEntry('${entry.id}')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-400 transition" title="Delete Entry">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </div>
-                    </td>
-                `;
+                // Authenticate
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
 
-                tbody.appendChild(tr);
+                // Test Connection via Listener
+                subscribeToFirestoreLogs();
+            } catch (err) {
+                console.warn("Firebase Init/Auth Failed, falling back to LocalStorage:", err);
+                setSyncMode(false, "Local Mode (Firebase Offline)");
+            }
+        }
+
+        // Firestore Realtime Listener
+        function subscribeToFirestoreLogs() {
+            if (!db) return;
+            const logsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'fitness_logs');
+
+            if (unsubscribeLogs) unsubscribeLogs();
+
+            unsubscribeLogs = onSnapshot(logsCollectionRef, (snapshot) => {
+                isFirebaseConnected = true;
+                setSyncMode(true, "Firebase Cloud Synced");
+
+                logsData = [];
+                snapshot.forEach((docSnap) => {
+                    logsData.push({
+                        id: docSnap.id,
+                        ...docSnap.data()
+                    });
+                });
+
+                sortAndRender();
+            }, (error) => {
+                console.warn("Firestore listener error, switching to local storage:", error);
+                isFirebaseConnected = false;
+                setSyncMode(false, "Local Mode (Cloud Read Error)");
+                loadLocalStorageLogs();
             });
         }
 
-        // Modal Control: Open Check-In Modal (New Entry)
-        function openCheckInModal() {
-            document.getElementById('editEntryId').value = '';
-            document.getElementById('modalTitle').textContent = `Log Check-In for ${activeUser}`;
-            document.getElementById('formUser').value = activeUser;
-
-            // Default week date to today's date in YYYY-MM-DD
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('formWeek').value = today;
-            document.getElementById('formWeight').value = '';
-            document.getElementById('formSleep').value = '';
-            document.getElementById('formSteps').value = '';
-            document.getElementById('formCalories').value = '';
-            document.getElementById('formWorkouts').value = '';
-
-            showModal();
+        // Local Storage Handlers
+        function loadLocalStorageLogs() {
+            const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (raw) {
+                try {
+                    logsData = JSON.parse(raw);
+                } catch(e) {
+                    logsData = [];
+                }
+            } else {
+                logsData = [];
+            }
+            sortAndRender();
         }
 
-        // Modal Control: Edit existing entry
-        function editEntry(id) {
-            const userLogs = trackerData[activeUser] || [];
-            const entry = userLogs.find(item => item.id === id);
-
-            if (!entry) return;
-
-            document.getElementById('editEntryId').value = entry.id;
-            document.getElementById('modalTitle').textContent = `Edit Check-In (${entry.week})`;
-            document.getElementById('formUser').value = activeUser;
-            document.getElementById('formWeek').value = entry.week;
-            
-            // Format weight in active display unit
-            document.getElementById('formWeight').value = currentUnit === 'kg' ? (entry.weight * 0.45359237).toFixed(1) : entry.weight;
-            document.getElementById('formSleep').value = entry.sleep;
-            document.getElementById('formSteps').value = entry.steps;
-            document.getElementById('formCalories').value = entry.calories;
-            document.getElementById('formWorkouts').value = entry.workouts;
-
-            showModal();
+        function saveToLocalStorage() {
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(logsData));
+            sortAndRender();
         }
 
-        function showModal() {
-            const modal = document.getElementById('checkInModal');
-            const container = document.getElementById('modalContainer');
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                container.classList.remove('scale-95', 'opacity-0');
-                container.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
+        function setSyncMode(online, message) {
+            const badge = document.getElementById('sync-status-badge');
+            const text = document.getElementById('sync-status-text');
+            const banner = document.getElementById('storage-banner');
+            const bannerText = document.getElementById('storage-banner-text');
 
-        function closeCheckInModal() {
-            const modal = document.getElementById('checkInModal');
-            const container = document.getElementById('modalContainer');
-            container.classList.remove('scale-100', 'opacity-100');
-            container.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 200);
-        }
+            text.textContent = message;
 
-        // Delete Entry Logic
-        function deleteEntry(id) {
-            if (confirm("Are you sure you want to delete this weekly entry?")) {
-                trackerData[activeUser] = (trackerData[activeUser] || []).filter(entry => entry.id !== id);
-                saveDataToStorage();
-                updateDashboard();
-                showToast("Entry deleted successfully");
+            if (online) {
+                badge.className = "px-2.5 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 border bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20 transition-all cursor-pointer";
+                badge.querySelector('span').className = "w-2 h-2 rounded-full bg-emerald-400";
+                banner.classList.add('hidden');
+            } else {
+                badge.className = "px-2.5 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 border bg-amber-500/10 text-amber-400 border-amber-500/20 hover:bg-amber-500/20 transition-all cursor-pointer";
+                badge.querySelector('span').className = "w-2 h-2 rounded-full bg-amber-400";
+                banner.classList.remove('hidden');
+                bannerText.innerHTML = `<strong>${message}</strong> — Data is stored safely on this browser. Configure Firebase to sync across devices.`;
             }
         }
 
-        // Handle Check-In Form Submit
-        function handleFormSubmit(e) {
-            e.preventDefault();
+        function sortAndRender() {
+            logsData.sort((a, b) => new Date(a.date) - new Date(b.date));
+            renderAll();
+        }
 
-            const targetUser = document.getElementById('formUser').value;
-            const editId = document.getElementById('editEntryId').value;
-            const week = document.getElementById('formWeek').value;
-            let weightInput = parseFloat(document.getElementById('formWeight').value);
+        // Render UI
+        function renderAll() {
+            const filteredLogs = logsData.filter(log => {
+                if (currentFilter === 'all') return true;
+                return log.userName === currentFilter;
+            });
 
-            // Convert to internal standard (lbs) if user entered in kg
-            const weightLbs = currentUnit === 'kg' ? parseFloat((weightInput / 0.45359237).toFixed(1)) : weightInput;
+            renderTable(filteredLogs);
+            renderStatsCards(filteredLogs);
+            updateCharts();
+            lucide.createIcons();
+        }
 
-            const newEntry = {
-                id: editId || 'log_' + Date.now(),
-                week: week,
-                weight: weightLbs,
-                sleep: parseFloat(document.getElementById('formSleep').value),
-                steps: parseInt(document.getElementById('formSteps').value, 10),
-                calories: parseInt(document.getElementById('formCalories').value, 10),
-                workouts: parseInt(document.getElementById('formWorkouts').value, 10)
+        function renderTable(logs) {
+            const tbody = document.getElementById('logs-table-body');
+            const emptyState = document.getElementById('empty-state');
+            const countBadge = document.getElementById('log-count-badge');
+
+            countBadge.textContent = `${logs.length} ${logs.length === 1 ? 'entry' : 'entries'}`;
+
+            if (logs.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            const sortedLogs = [...logs].reverse();
+
+            tbody.innerHTML = sortedLogs.map(log => {
+                const userBadgeClass = log.userName === 'Jack' 
+                    ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' 
+                    : 'bg-rose-500/10 text-rose-400 border-rose-500/20';
+
+                return `
+                    <tr class="hover:bg-slate-800/40 transition-colors">
+                        <td class="py-3.5 px-4 font-medium">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border ${userBadgeClass}">
+                                <span class="w-1.5 h-1.5 rounded-full ${log.userName === 'Jack' ? 'bg-blue-400' : 'bg-rose-400'}"></span>
+                                ${escapeHtml(log.userName)}
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-4 text-slate-200 font-medium">${formatDate(log.date)}</td>
+                        <td class="py-3.5 px-4 text-emerald-400 font-semibold">${log.weight} lbs</td>
+                        <td class="py-3.5 px-4 text-slate-300">${log.sleep} hrs</td>
+                        <td class="py-3.5 px-4 text-slate-300">${Number(log.steps).toLocaleString()}</td>
+                        <td class="py-3.5 px-4 text-amber-400">${Number(log.calories).toLocaleString()} kcal</td>
+                        <td class="py-3.5 px-4 text-purple-400">${log.workouts} session${log.workouts === 1 ? '' : 's'}</td>
+                        <td class="py-3.5 px-4 text-right space-x-2">
+                            <button onclick="editEntry('${log.id}')" class="p-1.5 text-slate-400 hover:text-emerald-400 hover:bg-slate-800 rounded-lg transition-all" title="Edit Entry">
+                                <i data-lucide="edit-2" class="w-4 h-4"></i>
+                            </button>
+                            <button onclick="promptDelete('${log.id}')" class="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-slate-800 rounded-lg transition-all" title="Delete Entry">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderStatsCards(logs) {
+            const weightEl = document.getElementById('stat-weight');
+            const weightSubEl = document.getElementById('stat-weight-sub');
+            const stepsEl = document.getElementById('stat-steps');
+            const stepsSubEl = document.getElementById('stat-steps-sub');
+            const caloriesEl = document.getElementById('stat-calories');
+            const caloriesSubEl = document.getElementById('stat-calories-sub');
+            const workoutsEl = document.getElementById('stat-workouts');
+            const workoutsSubEl = document.getElementById('stat-workouts-sub');
+
+            if (logs.length === 0) {
+                weightEl.textContent = '--';
+                weightSubEl.textContent = 'No entries recorded';
+                stepsEl.textContent = '--';
+                stepsSubEl.textContent = 'No entries recorded';
+                caloriesEl.textContent = '--';
+                caloriesSubEl.textContent = 'No entries recorded';
+                workoutsEl.textContent = '--';
+                workoutsSubEl.textContent = 'No entries recorded';
+                return;
+            }
+
+            const latestLog = logs[logs.length - 1];
+            weightEl.textContent = `${latestLog.weight} lbs`;
+            weightSubEl.textContent = `Latest: ${formatDate(latestLog.date)} (${latestLog.userName})`;
+
+            const avgSteps = Math.round(logs.reduce((acc, curr) => acc + Number(curr.steps), 0) / logs.length);
+            stepsEl.textContent = avgSteps.toLocaleString();
+            stepsSubEl.textContent = `Avg over ${logs.length} logged week${logs.length > 1 ? 's' : ''}`;
+
+            const avgCalories = Math.round(logs.reduce((acc, curr) => acc + Number(curr.calories), 0) / logs.length);
+            caloriesEl.textContent = `${avgCalories.toLocaleString()} kcal`;
+            caloriesSubEl.textContent = `Avg daily calorie intake`;
+
+            const totalWorkouts = logs.reduce((acc, curr) => acc + Number(curr.workouts), 0);
+            workoutsEl.textContent = totalWorkouts.toString();
+            workoutsSubEl.textContent = `Total workouts logged`;
+        }
+
+        function initCharts() {
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#94a3b8', font: { family: 'Inter', size: 11 } } }
+                },
+                scales: {
+                    x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748b', font: { family: 'Inter', size: 10 } } },
+                    y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748b', font: { family: 'Inter', size: 10 } } }
+                }
             };
 
-            if (!trackerData[targetUser]) {
-                trackerData[targetUser] = [];
-            }
-
-            if (editId) {
-                // Update existing
-                const idx = trackerData[targetUser].findIndex(item => item.id === editId);
-                if (idx !== -1) {
-                    trackerData[targetUser][idx] = newEntry;
-                }
-            } else {
-                // Check if entry for week already exists, update or push
-                const existingIdx = trackerData[targetUser].findIndex(item => item.week === week);
-                if (existingIdx !== -1) {
-                    trackerData[targetUser][existingIdx] = { ...newEntry, id: trackerData[targetUser][existingIdx].id };
-                } else {
-                    trackerData[targetUser].push(newEntry);
-                }
-            }
-
-            saveDataToStorage();
-
-            // Switch to form user if saved for different person
-            if (targetUser !== activeUser) {
-                switchUser(targetUser);
-            } else {
-                updateDashboard();
-            }
-
-            closeCheckInModal();
-            showToast(editId ? "Entry updated!" : "New weekly entry saved!");
+            weightChartInstance = new Chart(document.getElementById('weightChart').getContext('2d'), { type: 'line', data: { labels: [], datasets: [] }, options: chartOptions });
+            stepsChartInstance = new Chart(document.getElementById('stepsChart').getContext('2d'), { type: 'bar', data: { labels: [], datasets: [] }, options: chartOptions });
+            calorieChartInstance = new Chart(document.getElementById('calorieChart').getContext('2d'), { type: 'line', data: { labels: [], datasets: [] }, options: chartOptions });
+            sleepChartInstance = new Chart(document.getElementById('sleepChart').getContext('2d'), { type: 'line', data: { labels: [], datasets: [] }, options: chartOptions });
         }
 
-        // Helper Toast Notification
-        function showToast(message) {
+        function updateCharts() {
+            const dates = [...new Set(logsData.map(l => l.date))].sort();
+            const jackLogs = logsData.filter(l => l.userName === 'Jack');
+            const courtneyLogs = logsData.filter(l => l.userName === 'Courtney');
+
+            const getSeries = (logs, key) => dates.map(d => {
+                const found = logs.find(l => l.date === d);
+                return found ? Number(found[key]) : null;
+            });
+
+            const labels = dates.map(d => formatDate(d));
+
+            // Weight Chart
+            weightChartInstance.data.labels = labels;
+            weightChartInstance.data.datasets = [];
+            if (currentFilter === 'all' || currentFilter === 'Jack') {
+                weightChartInstance.data.datasets.push({ label: 'Jack (lbs)', data: getSeries(jackLogs, 'weight'), borderColor: '#60a5fa', tension: 0.3, spanGaps: true });
+            }
+            if (currentFilter === 'all' || currentFilter === 'Courtney') {
+                weightChartInstance.data.datasets.push({ label: 'Courtney (lbs)', data: getSeries(courtneyLogs, 'weight'), borderColor: '#fb7185', tension: 0.3, spanGaps: true });
+            }
+            weightChartInstance.update();
+
+            // Steps Chart
+            stepsChartInstance.data.labels = labels;
+            stepsChartInstance.data.datasets = [];
+            if (currentFilter === 'all' || currentFilter === 'Jack') {
+                stepsChartInstance.data.datasets.push({ label: 'Jack Steps', data: getSeries(jackLogs, 'steps'), backgroundColor: 'rgba(96, 165, 250, 0.7)', borderRadius: 6 });
+            }
+            if (currentFilter === 'all' || currentFilter === 'Courtney') {
+                stepsChartInstance.data.datasets.push({ label: 'Courtney Steps', data: getSeries(courtneyLogs, 'steps'), backgroundColor: 'rgba(251, 113, 133, 0.7)', borderRadius: 6 });
+            }
+            stepsChartInstance.update();
+
+            // Calorie Chart
+            calorieChartInstance.data.labels = labels;
+            calorieChartInstance.data.datasets = [];
+            if (currentFilter === 'all' || currentFilter === 'Jack') {
+                calorieChartInstance.data.datasets.push({ label: 'Jack Calories', data: getSeries(jackLogs, 'calories'), borderColor: '#fbbf24', tension: 0.3, spanGaps: true });
+            }
+            if (currentFilter === 'all' || currentFilter === 'Courtney') {
+                calorieChartInstance.data.datasets.push({ label: 'Courtney Calories', data: getSeries(courtneyLogs, 'calories'), borderColor: '#c084fc', tension: 0.3, spanGaps: true });
+            }
+            calorieChartInstance.update();
+
+            // Sleep Chart
+            sleepChartInstance.data.labels = labels;
+            sleepChartInstance.data.datasets = [];
+            if (currentFilter === 'all' || currentFilter === 'Jack') {
+                sleepChartInstance.data.datasets.push({ label: 'Jack Sleep (hrs)', data: getSeries(jackLogs, 'sleep'), borderColor: '#818cf8', backgroundColor: 'rgba(129, 140, 248, 0.1)', fill: true, tension: 0.3, spanGaps: true });
+            }
+            if (currentFilter === 'all' || currentFilter === 'Courtney') {
+                sleepChartInstance.data.datasets.push({ label: 'Courtney Sleep (hrs)', data: getSeries(courtneyLogs, 'sleep'), borderColor: '#2dd4bf', backgroundColor: 'rgba(45, 212, 191, 0.1)', fill: true, tension: 0.3, spanGaps: true });
+            }
+            sleepChartInstance.update();
+        }
+
+        // Form Submission (Add / Update)
+        window.handleFormSubmit = async function (e) {
+            e.preventDefault();
+            const id = document.getElementById('entry-id').value;
+            const selectedUser = document.querySelector('input[name="modal-user"]:checked').value;
+            
+            const payload = {
+                userName: selectedUser,
+                date: document.getElementById('entry-date').value,
+                weight: parseFloat(document.getElementById('entry-weight').value),
+                sleep: parseFloat(document.getElementById('entry-sleep').value),
+                steps: parseInt(document.getElementById('entry-steps').value, 10),
+                calories: parseInt(document.getElementById('entry-calories').value, 10),
+                workouts: parseInt(document.getElementById('entry-workouts').value, 10),
+                updatedAt: new Date().toISOString()
+            };
+
+            const saveBtn = document.getElementById('save-btn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+
+            try {
+                if (isFirebaseConnected && db) {
+                    const logsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'fitness_logs');
+                    if (id) {
+                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'fitness_logs', id);
+                        await updateDoc(docRef, payload);
+                    } else {
+                        await addDoc(logsCollectionRef, payload);
+                    }
+                    showToast(`Saved to Cloud for ${selectedUser}`, "success");
+                } else {
+                    // Local Storage Fallback
+                    if (id) {
+                        const idx = logsData.findIndex(l => l.id === id);
+                        if (idx !== -1) logsData[idx] = { id, ...payload };
+                    } else {
+                        logsData.push({ id: 'local_' + Date.now(), ...payload });
+                    }
+                    saveToLocalStorage();
+                    showToast(`Saved locally for ${selectedUser}`, "success");
+                }
+
+                closeEntryModal();
+            } catch (err) {
+                console.error("Save failed:", err);
+                // Switch to Local Storage on Save Failure
+                if (id) {
+                    const idx = logsData.findIndex(l => l.id === id);
+                    if (idx !== -1) logsData[idx] = { id, ...payload };
+                } else {
+                    logsData.push({ id: 'local_' + Date.now(), ...payload });
+                }
+                saveToLocalStorage();
+                setSyncMode(false, "Local Mode (Cloud Write Failed)");
+                showToast("Saved locally (Cloud unavailable)", "info");
+                closeEntryModal();
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save Entry';
+            }
+        };
+
+        // Modal Controllers
+        window.openEntryModal = function (entryId = null) {
+            const modal = document.getElementById('entry-modal');
+            const title = document.getElementById('modal-title');
+            
+            if (entryId) {
+                const log = logsData.find(l => l.id === entryId);
+                if (!log) return;
+
+                title.innerHTML = `<i data-lucide="edit-3" class="w-4 h-4 text-emerald-400"></i> Edit Weekly Log`;
+                document.getElementById('entry-id').value = log.id;
+                document.getElementById('entry-date').value = log.date;
+                document.getElementById('entry-weight').value = log.weight;
+                document.getElementById('entry-sleep').value = log.sleep;
+                document.getElementById('entry-steps').value = log.steps;
+                document.getElementById('entry-calories').value = log.calories;
+                document.getElementById('entry-workouts').value = log.workouts;
+
+                if (log.userName === 'Jack') {
+                    document.getElementById('modal-user-jack').checked = true;
+                } else {
+                    document.getElementById('modal-user-courtney').checked = true;
+                }
+            } else {
+                title.innerHTML = `<i data-lucide="plus-circle" class="w-4 h-4 text-emerald-400"></i> Add Weekly Log`;
+                document.getElementById('log-form').reset();
+                document.getElementById('entry-id').value = '';
+                document.getElementById('entry-date').value = new Date().toISOString().split('T')[0];
+                
+                if (currentUser === 'Jack') {
+                    document.getElementById('modal-user-jack').checked = true;
+                } else {
+                    document.getElementById('modal-user-courtney').checked = true;
+                }
+            }
+
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.closeEntryModal = function () {
+            document.getElementById('entry-modal').classList.add('hidden');
+        };
+
+        window.editEntry = function (id) {
+            openEntryModal(id);
+        };
+
+        window.promptDelete = function (id) {
+            deleteTargetId = id;
+            document.getElementById('delete-modal').classList.remove('hidden');
+        };
+
+        window.closeDeleteModal = function () {
+            deleteTargetId = null;
+            document.getElementById('delete-modal').classList.add('hidden');
+        };
+
+        document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+            if (!deleteTargetId) return;
+
+            try {
+                if (isFirebaseConnected && db && !deleteTargetId.startsWith('local_')) {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'fitness_logs', deleteTargetId);
+                    await deleteDoc(docRef);
+                    showToast("Entry deleted from cloud", "success");
+                } else {
+                    logsData = logsData.filter(l => l.id !== deleteTargetId);
+                    saveToLocalStorage();
+                    showToast("Entry deleted locally", "success");
+                }
+            } catch (err) {
+                console.error("Delete Error:", err);
+                logsData = logsData.filter(l => l.id !== deleteTargetId);
+                saveToLocalStorage();
+                showToast("Deleted locally", "info");
+            } finally {
+                closeDeleteModal();
+            }
+        });
+
+        // Config Modal Controllers
+        window.openConfigModal = function () {
+            const modal = document.getElementById('config-modal');
+            const textarea = document.getElementById('firebase-config-json');
+            const currentConfig = getFirebaseConfig();
+
+            textarea.value = currentConfig ? JSON.stringify(currentConfig, null, 2) : '';
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.closeConfigModal = function () {
+            document.getElementById('config-modal').classList.add('hidden');
+        };
+
+        window.saveFirebaseConfig = async function () {
+            const raw = document.getElementById('firebase-config-json').value.trim();
+            if (!raw) {
+                clearFirebaseConfig();
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(raw);
+                if (!parsed.apiKey || !parsed.projectId) {
+                    throw new Error("Invalid config object. Requires apiKey and projectId.");
+                }
+                localStorage.setItem(CUSTOM_CONFIG_KEY, JSON.stringify(parsed));
+                closeConfigModal();
+                showToast("Saved config! Reconnecting...", "info");
+                await attemptFirebaseInit();
+            } catch (err) {
+                alert("Invalid JSON format or missing keys. Please paste a valid Firebase config object.");
+            }
+        };
+
+        window.clearFirebaseConfig = function () {
+            localStorage.removeItem(CUSTOM_CONFIG_KEY);
+            isFirebaseConnected = false;
+            closeConfigModal();
+            setSyncMode(false, "Local Storage Mode Active");
+            loadLocalStorageLogs();
+            showToast("Switched to Local Storage", "info");
+        };
+
+        // Navigation Switchers
+        window.setActiveUser = function (user) {
+            currentUser = user;
+            updateUserUI();
+            showToast(`Active logger: ${user}`, "info");
+        };
+
+        window.setViewFilter = function (filter) {
+            currentFilter = filter;
+            updateFilterUI();
+            renderAll();
+        };
+
+        function updateUserUI() {
+            const jackBtn = document.getElementById('user-btn-jack');
+            const courtneyBtn = document.getElementById('user-btn-courtney');
+
+            if (currentUser === 'Jack') {
+                jackBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-blue-500/20 text-blue-300 border border-blue-500/30 flex items-center gap-1.5 shadow-sm";
+                courtneyBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-white flex items-center gap-1.5";
+            } else {
+                jackBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-white flex items-center gap-1.5";
+                courtneyBtn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all bg-rose-500/20 text-rose-300 border border-rose-500/30 flex items-center gap-1.5 shadow-sm";
+            }
+        }
+
+        function updateFilterUI() {
+            const allTab = document.getElementById('view-tab-all');
+            const jackTab = document.getElementById('view-tab-jack');
+            const courtneyTab = document.getElementById('view-tab-courtney');
+
+            const activeClass = "bg-slate-700 text-white shadow-sm";
+            const inactiveClass = "text-slate-400 hover:text-white";
+
+            allTab.className = `flex-1 sm:flex-initial px-4 py-2 rounded-lg text-xs font-semibold transition-all ${currentFilter === 'all' ? activeClass : inactiveClass}`;
+            jackTab.className = `flex-1 sm:flex-initial px-4 py-2 rounded-lg text-xs font-semibold transition-all ${currentFilter === 'Jack' ? activeClass : inactiveClass}`;
+            courtneyTab.className = `flex-1 sm:flex-initial px-4 py-2 rounded-lg text-xs font-semibold transition-all ${currentFilter === 'Courtney' ? activeClass : inactiveClass}`;
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            const d = new Date(parts[0], parts[1] - 1, parts[2]);
+            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        function showToast(message, type = "success") {
             const toast = document.getElementById('toast');
-            document.getElementById('toastMessage').textContent = message;
+            const toastMessage = document.getElementById('toast-message');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastMessage.textContent = message;
+
+            if (type === "success") {
+                toastIcon.setAttribute('data-lucide', 'check-circle');
+                toastIcon.className = "w-5 h-5 text-emerald-400";
+            } else if (type === "error") {
+                toastIcon.setAttribute('data-lucide', 'x-circle');
+                toastIcon.className = "w-5 h-5 text-rose-400";
+            } else {
+                toastIcon.setAttribute('data-lucide', 'info');
+                toastIcon.className = "w-5 h-5 text-blue-400";
+            }
+
+            lucide.createIcons();
+
             toast.classList.remove('translate-y-20', 'opacity-0');
             toast.classList.add('translate-y-0', 'opacity-100');
 
